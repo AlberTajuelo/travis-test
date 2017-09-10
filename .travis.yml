@@ -20,8 +20,19 @@ matrix:
             - clang-3.8
           sources: *sources
 
-script:
-  - make
+
+jobs:
+  include:
+    - script: make
+    - stage: GitHub Release
+      script: skip
+      deploy:
+        provider: releases
+        file: "bin/*"
+        api_key: "$GITHUB_OAUTH_TOKEN"
+        skip_cleanup: true
+        on:
+          tags: true
 
 cache:
   apt: true
